@@ -1,0 +1,20 @@
+{
+  "name": "AsyncTask",
+  "version": "1.0.0",
+  "keywords": "Async, Non Blocking",
+  "description": "AsyncTask is a Arduino Library For executing Function in non-blocking asynchronous fashion.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moinologics/AsyncTask.git"
+  },
+  "authors": [
+    {
+      "name": "Moin Ahmad",
+      "email": "mohin.ahmad.dev@gmail.com",
+      "maintainer": true
+    }
+  ],
+  "frameworks": "arduino",
+  "platforms": ["espressif8266", "espressif32"],
+  "dependencies": []
+}
