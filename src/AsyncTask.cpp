@@ -91,24 +91,3 @@ void AsyncTask::clearAllTasks() {
     this->removeTask(taskList->id);
   }
 }
-
-/** Example Usage
-
-void task() {
-  Serial.println("named task executed");
-}
-
-AsyncTask asyncTask;
-
-void setup() {
-  Serial.begin(9600);
-  // Add some tasks
-  asyncTask.once([]() { Serial.println("anonymous Task executed"); }, 1000);
-//Run once every 1000ms asyncTask.repeat(task, 2000);  // Run every 2000ms
-}
-
-void loop() {
-  asyncTask.run();  // Call to check and run tasks
-}
-
-**/

@@ -104,7 +104,7 @@ void setup() {
 
 void loop() {
   // Check and run scheduled tasks
-  asyncTask.run();
+  asyncTask.loop();
 }
 
 void taskOne() {
