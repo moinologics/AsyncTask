@@ -54,11 +54,11 @@ asyncTask.repeat(yourCallbackFunction, 2000);  // Run the callback every 2000 ms
 ```
 
 ### 5. Running the Task Scheduler
-In the `loop()` function, call `asyncTask.run()` to let the scheduler execute any pending tasks:
+In the `loop()` function, call `asyncTask.loop()` to let the scheduler execute any pending tasks:
 
 ```cpp
 void loop() {
-  asyncTask.run();  // Continuously check and run tasks
+  asyncTask.loop();  // Continuously check and run tasks
 }
 ```
 
@@ -87,6 +87,8 @@ Here's an example of using AsyncTask in a sketch:
 
 AsyncTask asyncTask;
 
+unsigned int repeatId;
+
 void setup() {
   Serial.begin(9600);
 
@@ -94,12 +96,17 @@ void setup() {
   asyncTask.once(taskOne, 1000);
 
   // Run this task every 2 seconds
-  asyncTask.repeat(taskTwo, 2000);
+  repeatId = asyncTask.repeat(taskTwo, 2000);
 
   // Run this anonymous task once after 3 second
   asyncTask.once([]() {
     Serial.println("i'm anonymous function task");
   }, 3000);
+
+  asyncTask.once([]() {
+    Serial.println("Task Two stopped!");
+    asyncTask.remove(repeatId);
+  }, 10000);
 }
 
 void loop() {
@@ -125,19 +132,24 @@ asyncTask.clearAllTasks();
 
 
 ### API Reference
-  `void once(Callback callback, unsigned long timeout)`
+  `unsigned int once(Callback callback, unsigned long timeout)`
   - Description: Adds a task that runs once after the specified time.
   - Parameters:
     - `callback`: The function to call when the task runs.
     - `interval`: The time delay (in milliseconds) before the task is executed.
 
- `void repeat(Callback callback, unsigned long interval)`
+ `unsigned int repeat(Callback callback, unsigned long interval)`
   - Description: Adds a task that runs repeatedly at the specified time interval.
   - Parameters:
     - `callback`: The function to call when the task runs.
     - `interval`: The interval (in milliseconds) between each execution of the task.
 
- `void run()`
+ `void remove(unsigned int id)`
+  - Description: Removes a task from execution queue by using its identifier.
+  - Parameters:
+    - `id`: The task id.
+
+ `void loop()`
   - Description: Checks all scheduled tasks and executes any that are due to run. This method should be called frequently in the loop() to ensure that tasks are executed on time.
 
  `void clearAllTasks()`

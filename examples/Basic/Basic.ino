@@ -2,6 +2,8 @@
 
 AsyncTask asyncTask;
 
+unsigned int repeatId;
+
 void setup() {
   Serial.begin(9600);
 
@@ -9,12 +11,17 @@ void setup() {
   asyncTask.once(taskOne, 1000);
 
   // Run this task every 2 seconds
-  asyncTask.repeat(taskTwo, 2000);
+  repeatId = asyncTask.repeat(taskTwo, 2000);
 
   // Run this anonymous task once after 3 second
   asyncTask.once([]() {
     Serial.println("i'm anonymous function task");
   }, 3000);
+
+  asyncTask.once([]() {
+    Serial.println("Task Two stopped!");
+    asyncTask.remove(repeatId);
+  }, 10000);
 }
 
 void loop() {

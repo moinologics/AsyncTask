@@ -9,22 +9,22 @@ AsyncTask::AsyncTask() {
 }
 
 // Method to add a one-time task
-void AsyncTask::once(Callback callback, unsigned long timeout) {
-  this->addTask(callback, ONCE, timeout);
+unsigned int AsyncTask::once(Callback callback, unsigned long timeout) {
+  return this->addTask(callback, ONCE, timeout);
 }
 
 // Method to add a repeating task
-void AsyncTask::repeat(Callback callback, unsigned long interval) {
-  this->addTask(callback, REPEAT, interval);
+unsigned int AsyncTask::repeat(Callback callback, unsigned long interval) {
+  return this->addTask(callback, REPEAT, interval);
 }
 
 // Private method to add a task with auto-generated ID
-void AsyncTask::addTask(Callback callback, TaskMode mode, unsigned long interval) {
+unsigned int AsyncTask::addTask(Callback callback, TaskMode mode, unsigned long interval) {
   Task *newTask = new Task();
   newTask->id = nextId++;  // Assign and increment the ID
   newTask->callback = callback;
   newTask->mode = mode;
-  newTask->lastRun = 0;
+  newTask->lastRun = millis();
   newTask->interval = interval;
   newTask->next = nullptr;
   if (this->taskList ==
@@ -38,10 +38,11 @@ void AsyncTask::addTask(Callback callback, TaskMode mode, unsigned long interval
     // Set the new task as the next of the last task
     current->next = newTask;
   }
+  return newTask->id;
 }
 
 // Method to remove a task by id
-void AsyncTask::removeTask(int id) {
+void AsyncTask::remove(unsigned int id) {
   Task *current = this->taskList;
   Task *previous = nullptr;
 
@@ -75,7 +76,7 @@ void AsyncTask::loop() {
       if (current->mode == ONCE) {
         Task *toDelete = current;
         current = current->next;         // Move to next task
-        this->removeTask(toDelete->id);  // Remove the task
+        this->remove(toDelete->id);  // Remove the task
       } else {
         current = current->next;  // Move to next task
       }
@@ -88,6 +89,6 @@ void AsyncTask::loop() {
 // A method to clear all tasks (e.g., during cleanup)
 void AsyncTask::clearAllTasks() {
   while (taskList != nullptr) {
-    this->removeTask(taskList->id);
+    this->remove(taskList->id);
   }
 }

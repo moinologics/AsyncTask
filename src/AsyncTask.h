@@ -8,7 +8,7 @@ class AsyncTask {
 
   // Struct for a single task
   struct Task {
-    int id;                  // Unique task ID
+    unsigned int id;         // Unique task ID
     void (*callback)();      // Pointer to a function
     TaskMode mode;           // Task mode: ONCE or REPEAT
     unsigned long lastRun;   // Timestamp of the last execution
@@ -21,24 +21,24 @@ class AsyncTask {
 
   Task* taskList;             // Head of the linked list
   unsigned long currentTime;  // Current time for task management
-  int nextId;                 // Auto-incrementing task ID
+  unsigned int nextId;        // Auto-incrementing task ID
 
   // Private method to add a task with auto-generated ID
-  void addTask(Callback callback, TaskMode mode, unsigned long interval);
-
-  // Method to remove a task by id (used internally)
-  void removeTask(int id);
+  unsigned int addTask(Callback callback, TaskMode mode, unsigned long interval);
 
  public:
   // Constructor
   AsyncTask();
 
   // Method to add a one-time task
-  void once(Callback callback, unsigned long timeout);
+  unsigned int once(Callback callback, unsigned long timeout);
 
   // Method to add a repeating task
-  void repeat(Callback callback, unsigned long interval);
+  unsigned int repeat(Callback callback, unsigned long interval);
 
+  // Method to remove a task by id
+  void remove(unsigned int id);
+ 
   // Method to be put inside sketch loop 
   void loop();
 
